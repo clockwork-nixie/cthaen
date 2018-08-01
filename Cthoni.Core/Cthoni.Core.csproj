@@ -60,6 +60,9 @@
     <Compile Include="CommandLine\DirectiveSet.cs" />
     <Compile Include="CommandLine\CommandLineException.cs" />
     <Compile Include="CommandLine\CommandLineProcessor.cs" />
+    <Compile Include="CommandLine\IDirectiveSet.cs" />
+    <Compile Include="CommandLine\ParsePolicies\MultiWordParsePolicy.cs" />
+    <Compile Include="CommandLine\ParsePolicies\AsymmetricParsePolicy.cs" />
     <Compile Include="CommandLine\ParseTree.cs" />
     <Compile Include="CommandLine\Response.cs" />
     <Compile Include="CommandLine\ResponseType.cs" />
@@ -70,10 +73,13 @@
     <Compile Include="CommandLine\ICommandLineProcessor.cs" />
     <Compile Include="DependencyInjection\IFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Science\FactBase.cs" />
+    <Compile Include="Science\IFactBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

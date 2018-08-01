@@ -11,9 +11,10 @@ namespace Cthoni.Core.CommandLine.ParsePolicies
         [NotNull] private readonly string _prefix;
 
 
+        [UsedImplicitly]
         public SimpleParsePolicy([NotNull] string prefix = "$")
         {
-            if (!string.IsNullOrWhiteSpace(prefix))
+            if (string.IsNullOrWhiteSpace(prefix))
             {
                 throw new ArgumentNullException(nameof(prefix));
             }
@@ -21,10 +22,10 @@ namespace Cthoni.Core.CommandLine.ParsePolicies
         }
 
 
-        public IEnumerable<ParseToken> ParseInput(string sentence) => ParseSpecification(sentence);
+        public virtual IEnumerable<ParseToken> ParseInput(string sentence) => ParseSpecification(sentence);
 
 
-        public IEnumerable<ParseToken> ParseSpecification(string sentence) => sentence
+        public virtual IEnumerable<ParseToken> ParseSpecification(string sentence) => sentence
             .Split(_separators, StringSplitOptions.RemoveEmptyEntries)
             .Where(t => t != null)
             .Select(t => new ParseToken { IsParameter = t.StartsWith(_prefix), Text = t.StartsWith(_prefix)? t.Substring(1): t });

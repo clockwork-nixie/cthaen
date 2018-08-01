@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Cthoni.Core.CommandLine
 {
-    public class DirectiveSet
+    public class DirectiveSet : IDirectiveSet
     {
         [NotNull] private readonly ParseTree _directives = new ParseTree();
         [NotNull] private readonly IParsePolicy _parser;
@@ -20,8 +20,7 @@ namespace Cthoni.Core.CommandLine
         }
 
 
-        [NotNull]
-        public Response Process([NotNull] string sentence)
+        public Response Process(string sentence)
         {
             if (sentence == null)
             {
@@ -43,11 +42,11 @@ namespace Cthoni.Core.CommandLine
 
 
         // ReSharper disable UnusedMember.Global
-        public void Register([NotNull] string pattern, [NotNull] Func<Response> action) { Register(pattern, (Delegate)action); }
-        public void Register([NotNull] string pattern, [NotNull] Func<string, Response> action) { Register(pattern, (Delegate)action); }
-        public void Register([NotNull] string pattern, [NotNull] Func<string, string, Response> action) { Register(pattern, (Delegate)action); }
-        public void Register([NotNull] string pattern, [NotNull] Func<string, string, string, Response> action) { Register(pattern, (Delegate)action); }
-        public void Register([NotNull] string pattern, [NotNull] Func<string, string, string, string, Response> action) { Register(pattern, (Delegate)action); }
+        public void Register(string pattern, Func<Response> action) { Register(pattern, (Delegate)action); }
+        public void Register(string pattern, Func<string, Response> action) { Register(pattern, (Delegate)action); }
+        public void Register(string pattern, Func<string, string, Response> action) { Register(pattern, (Delegate)action); }
+        public void Register(string pattern, Func<string, string, string, Response> action) { Register(pattern, (Delegate)action); }
+        public void Register(string pattern, Func<string, string, string, string, Response> action) { Register(pattern, (Delegate)action); }
         // ReSharper restore UnusedMember.Global
 
 

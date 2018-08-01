@@ -1,5 +1,7 @@
 ﻿using Cthoni.Core.CommandLine;
+using Cthoni.Core.CommandLine.ParsePolicies;
 using Cthoni.Core.DependencyInjection;
+using Cthoni.Core.Science;
 using JetBrains.Annotations;
 
 namespace Cthoni
@@ -12,8 +14,10 @@ namespace Cthoni
 
             factory.RegisterSingleton<IFactory>(factory);
             factory.RegisterSingleton<ICommandLine, CommandLine>();
+            factory.RegisterSingleton<IFactBase, FactBase>();
 
             factory.Register<ICommandLineProcessor, CommandLineProcessor>();
+            factory.Register<IDirectiveSet>(() => new DirectiveSet(new AsymmetricParsePolicy()));
 
             return factory;
         }

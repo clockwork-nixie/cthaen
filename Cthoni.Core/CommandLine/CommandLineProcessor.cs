@@ -1,4 +1,6 @@
-﻿using Cthoni.Core.CommandLine.ParsePolicies;
+﻿using System;
+using Cthoni.Core.DependencyInjection;
+using Cthoni.Core.Science;
 using JetBrains.Annotations;
 
 namespace Cthoni.Core.CommandLine
@@ -6,12 +8,19 @@ namespace Cthoni.Core.CommandLine
     [UsedImplicitly]
     public class CommandLineProcessor : ICommandLineProcessor
     {
-        [NotNull] private readonly DirectiveSet _directives = 
-            new DirectiveSet(new SimpleParsePolicy());
+        [NotNull] private readonly IDirectiveSet _directives;
+        [NotNull] private readonly IFactBase _facts;
 
 
-        public CommandLineProcessor()
+        public CommandLineProcessor([NotNull] IFactory factory)
         {
+            if (factory == null)
+            {
+                throw new ArgumentNullException(nameof(factory));
+            }
+            _facts = factory.GetInstance<IFactBase>();
+            _directives = factory.GetInstance<IDirectiveSet>();
+            
             _directives.Register("hello", () => "yo!");
             _directives.Register("my name is $name", name => $"Pleased to meet you, {name}.");
             _directives.Register("quit", () => new Response(ResponseType.Quit));
