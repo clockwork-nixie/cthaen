@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Cthoni.Core.Interfaces
+namespace Cthoni.Core.DependencyInjection
 {
     public interface IFactoryBuilder
     {

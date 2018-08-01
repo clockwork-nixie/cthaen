@@ -1,5 +1,4 @@
 ﻿using System;
-using Cthoni.Core.Interfaces;
 using JetBrains.Annotations;
 using SimpleInjector;
 

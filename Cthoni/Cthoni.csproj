@@ -58,7 +58,7 @@
   <ItemGroup>
     <Compile Include="CommandLine.cs" />
     <Compile Include="DependencyInjection.cs" />
-    <Compile Include="Interfaces\ICommandLine.cs" />
+    <Compile Include="ICommandLine.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

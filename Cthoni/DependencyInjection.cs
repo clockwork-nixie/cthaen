@@ -1,6 +1,6 @@
-﻿using Cthoni.Core.DependencyInjection;
-using Cthoni.Core.Interfaces;
-using Cthoni.Interfaces;
+﻿using Cthoni.Core;
+using Cthoni.Core.CommandLine;
+using Cthoni.Core.DependencyInjection;
 using JetBrains.Annotations;
 
 namespace Cthoni
@@ -11,7 +11,10 @@ namespace Cthoni
         {
             var factory = new Factory();
 
+            factory.RegisterSingleton<IFactory>(factory);
             factory.RegisterSingleton<ICommandLine, CommandLine>();
+
+            factory.Register<ICommandLineProcessor, CommandLineProcessor>();
 
             return factory;
         }

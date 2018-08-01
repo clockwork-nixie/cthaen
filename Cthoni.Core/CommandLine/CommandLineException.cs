@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Cthoni.Core
+namespace Cthoni.Core.CommandLine
 {
     public class CommandLineException : Exception
     {

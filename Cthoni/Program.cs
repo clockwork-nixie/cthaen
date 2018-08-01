@@ -1,6 +1,5 @@
 ﻿using System;
-using Cthoni.Core.Interfaces;
-using Cthoni.Interfaces;
+using Cthoni.Core.DependencyInjection;
 using JetBrains.Annotations;
 using NLog;
 

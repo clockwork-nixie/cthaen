@@ -57,10 +57,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandLineException.cs" />
+    <Compile Include="CommandLine\CommandLineDirectiveSet.cs" />
+    <Compile Include="CommandLine\CommandLineException.cs" />
+    <Compile Include="CommandLine\CommandLineProcessor.cs" />
+    <Compile Include="CommandLine\IParsePolicy.cs" />
+    <Compile Include="CommandLine\ParseToken.cs" />
+    <Compile Include="CommandLine\SimpleParsePolicy.cs" />
     <Compile Include="DependencyInjection\Factory.cs" />
-    <Compile Include="Interfaces\IFactoryBuilder.cs" />
-    <Compile Include="Interfaces\IFactory.cs" />
+    <Compile Include="CommandLine\ICommandLineProcessor.cs" />
+    <Compile Include="DependencyInjection\IFactoryBuilder.cs" />
+    <Compile Include="DependencyInjection\IFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

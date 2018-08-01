@@ -1,16 +1,17 @@
 ﻿using System;
 using Cthoni.Core;
-using Cthoni.Core.Interfaces;
-using Cthoni.Interfaces;
+using Cthoni.Core.CommandLine;
+using Cthoni.Core.DependencyInjection;
 using JetBrains.Annotations;
 
 namespace Cthoni
 {
+    [UsedImplicitly]
     public class CommandLine : ICommandLine
     {
         private const string PROMPT = ">> ";
 
-        [NotNull] private readonly IFactory _factory;
+        [NotNull] private readonly ICommandLineProcessor _processor;
         
 
         public CommandLine([NotNull] IFactory factory)
@@ -19,7 +20,7 @@ namespace Cthoni
             {
                 throw new ArgumentNullException(nameof(factory));
             }
-            _factory = factory;
+            _processor = factory.GetInstance<ICommandLineProcessor>();
         }
 
 
@@ -37,11 +38,16 @@ namespace Cthoni
 
                 var command = Console.ReadLine();
 
+                Console.WriteLine();
+
                 if (!string.IsNullOrWhiteSpace(command))
                 {
                     try
                     {
-                        // PROCESS
+                        var response = _processor.Process(command);
+
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.WriteLine(response);
                     }
                     catch (CommandLineException exception)
                     {

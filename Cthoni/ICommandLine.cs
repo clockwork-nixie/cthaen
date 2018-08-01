@@ -1,4 +1,4 @@
-﻿namespace Cthoni.Interfaces
+﻿namespace Cthoni
 {
     public interface ICommandLine
     {
