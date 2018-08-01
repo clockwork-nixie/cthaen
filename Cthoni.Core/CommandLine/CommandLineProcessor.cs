@@ -5,21 +5,21 @@ namespace Cthoni.Core.CommandLine
     [UsedImplicitly]
     public class CommandLineProcessor : ICommandLineProcessor
     {
-        [NotNull] private readonly CommandLineDirectiveSet _directives = 
-            new CommandLineDirectiveSet(new SimpleParsePolicy());
+        [NotNull] private readonly DirectiveSet _directives = 
+            new DirectiveSet(new SimpleParsePolicy());
 
 
         public CommandLineProcessor()
         {
             _directives.Register("hello", () => "yo!");
             _directives.Register("my name is $name", name => $"Pleased to meet you, {name}.");
-            _directives.Register("quit", () => new CommandLineResponse(CommandLineResponseType.Quit));
+            _directives.Register("quit", () => new Response(ResponseType.Quit));
         }
 
 
-        public CommandLineResponse Process(string command)
+        public Response Process(string command)
         {
-            CommandLineResponse response;
+            Response response;
 
             try
             {
@@ -27,9 +27,7 @@ namespace Cthoni.Core.CommandLine
             }
             catch (CommandLineException exception)
             {
-                response = new CommandLineResponse(
-                    exception.Message ?? "Unknown error.",
-                    CommandLineResponseType.Error);
+                response = new Response(exception.Message ?? "Unknown error.", ResponseType.Error);
             }
             return response;
         } 

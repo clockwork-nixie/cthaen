@@ -57,11 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandLine\CommandLineDirectiveSet.cs" />
+    <Compile Include="CommandLine\DirectiveSet.cs" />
     <Compile Include="CommandLine\CommandLineException.cs" />
     <Compile Include="CommandLine\CommandLineProcessor.cs" />
-    <Compile Include="CommandLine\CommandLineResponse.cs" />
-    <Compile Include="CommandLine\CommandLineResponseType.cs" />
+    <Compile Include="CommandLine\ParseTree.cs" />
+    <Compile Include="CommandLine\Response.cs" />
+    <Compile Include="CommandLine\ResponseType.cs" />
     <Compile Include="CommandLine\IParsePolicy.cs" />
     <Compile Include="CommandLine\ParseToken.cs" />
     <Compile Include="CommandLine\SimpleParsePolicy.cs" />

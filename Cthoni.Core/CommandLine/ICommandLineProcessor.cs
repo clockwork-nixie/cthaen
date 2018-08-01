@@ -4,6 +4,6 @@ namespace Cthoni.Core.CommandLine
 {
     public interface ICommandLineProcessor
     {
-        [NotNull] CommandLineResponse Process([NotNull] string command);
+        [NotNull] Response Process([NotNull] string command);
     }
 }

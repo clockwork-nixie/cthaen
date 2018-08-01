@@ -2,10 +2,11 @@
 
 namespace Cthoni.Core.CommandLine
 {
-    public enum CommandLineResponseType
+    public enum ResponseType
     {
         [UsedImplicitly] Unknown = 0,
         Error,
+        NotFound,
         Text,
         Quit
     }

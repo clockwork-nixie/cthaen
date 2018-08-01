@@ -5,14 +5,14 @@ using JetBrains.Annotations;
 
 namespace Cthoni.Core.CommandLine
 {
-    public class CommandLineDirectiveSet
+    public class DirectiveSet
     {
-        [NotNull] private readonly IDictionary<string, Func<string[], CommandLineResponse>> _directives = 
-            new Dictionary<string, Func<string[], CommandLineResponse>>();
+        [NotNull] private readonly IDictionary<string, Func<string[], Response>> _directives = 
+            new Dictionary<string, Func<string[], Response>>();
         [NotNull] private readonly IParsePolicy _parser;
 
 
-        public CommandLineDirectiveSet([NotNull] IParsePolicy parser)
+        public DirectiveSet([NotNull] IParsePolicy parser)
         {
             if (parser == null)
             {
@@ -27,35 +27,38 @@ namespace Cthoni.Core.CommandLine
 
 
         [NotNull]
-        public CommandLineResponse Process([NotNull] string sentence)
+        public Response Process([NotNull] string sentence)
         {
             if (sentence == null)
             {
                 throw new ArgumentNullException(nameof(sentence));
             }
-            CommandLineResponse response = null;
+            Response response = null;
 
             if (!string.IsNullOrEmpty(sentence))
             {
                 var tokens = _parser.ParseInput(sentence).ToArray();
-                Func<string[], CommandLineResponse> method;
+                Func<string[], Response> method;
 
-                if (!_directives.TryGetValue(MakeKey(tokens), out method) || method == null)
+                if (_directives.TryGetValue(MakeKey(tokens), out method) && method != null)
                 {
-                    throw new CommandLineException("I'm sorry, Laura; I don't understand the question.");
+                    response = method.Invoke(tokens.Select(t => t.Text).ToArray());
                 }
-                response = method.Invoke(tokens.Select(t => t.Text).ToArray());
+                else
+                {
+                    response = new Response("I'm sorry, Laura; I don't understand the question.", ResponseType.NotFound);
+                }
             }
-            return response ?? new CommandLineResponse(string.Empty);
+            return response ?? new Response(string.Empty);
         }
 
 
         // ReSharper disable UnusedMember.Global
-        public void Register([NotNull] string pattern, [NotNull] Func<CommandLineResponse> action) { Register(pattern, (Delegate)action); }
-        public void Register([NotNull] string pattern, [NotNull] Func<string, CommandLineResponse> action) { Register(pattern, (Delegate)action); }
-        public void Register([NotNull] string pattern, [NotNull] Func<string, string, CommandLineResponse> action) { Register(pattern, (Delegate)action); }
-        public void Register([NotNull] string pattern, [NotNull] Func<string, string, string, CommandLineResponse> action) { Register(pattern, (Delegate)action); }
-        public void Register([NotNull] string pattern, [NotNull] Func<string, string, string, string, CommandLineResponse> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<Response> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<string, Response> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<string, string, Response> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<string, string, string, Response> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<string, string, string, string, Response> action) { Register(pattern, (Delegate)action); }
         // ReSharper restore UnusedMember.Global
 
 
@@ -91,8 +94,8 @@ namespace Cthoni.Core.CommandLine
             {
                 throw new ArgumentException($"Failed to map argments for directive: {pattern}");
             }
-            Func<string[], CommandLineResponse> method = 
-                inputs => (CommandLineResponse)action.DynamicInvoke(indices.Select(i => (object)(inputs?[i])).ToArray());
+            Func<string[], Response> method = 
+                inputs => (Response)action.DynamicInvoke(indices.Select(i => (object)(inputs?[i])).ToArray());
 
             _directives.Add(MakeKey(tokens), method);
         }

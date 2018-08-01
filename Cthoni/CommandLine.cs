@@ -50,18 +50,19 @@ namespace Cthoni
 
                         switch (response.Type)
                         {
-                            case CommandLineResponseType.Error:
+                            case ResponseType.NotFound:
+                            case ResponseType.Error:
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine(response.Text);
                                 break;
 
-                            case CommandLineResponseType.Quit:
+                            case ResponseType.Quit:
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 Console.WriteLine(GOODBYE);
                                 isFinished = true;
                                 break;
 
-                            case CommandLineResponseType.Text:
+                            case ResponseType.Text:
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 Console.WriteLine(response.Text);
                                 break;
