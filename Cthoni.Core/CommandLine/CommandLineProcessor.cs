@@ -11,7 +11,7 @@ namespace Cthoni.Core.CommandLine
 
         public CommandLineProcessor()
         {
-            _directives.Register("hello", () => "Pleased to meet you.");
+            _directives.Register("hello", () => "yo!");
             _directives.Register("my name is $name", name => $"Pleased to meet you, {name}.");
             _directives.Register("quit", () => new CommandLineResponse(CommandLineResponseType.Quit));
         }

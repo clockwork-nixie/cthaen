@@ -74,19 +74,25 @@ namespace Cthoni.Core.CommandLine
             var parameters = action.Method.GetParameters();
             var tokens = _parser.ParseSpecification(pattern).ToArray();
             var counter = 0;
-            var parameterIndices = tokens
-                .Select(t => new { Index = counter++, IsParameter = t != null && t.IsParameter })
+            var arguments = tokens
+                .Select(t => new { Name = t?.Text, Index = counter++, IsParameter = t != null && t.IsParameter })
                 .Where(t => t.IsParameter)
-                .Select(p => p.Index)
                 .ToArray();
 
-            if (parameterIndices.Length != parameters.Length)
+            if (arguments.Length != arguments.Select(a => a?.Name).Where(name => !string.IsNullOrWhiteSpace(name)).Distinct().Count())
             {
-                throw new ArgumentException($"Input has {parameterIndices.Length} parameters but action requires {parameters.Length}.");
+                throw new ArgumentException($"Duplicate parameter found in directive: {pattern}");
             }
 
-            Func<string[], CommandLineResponse> method = arguments => 
-                (CommandLineResponse)action.DynamicInvoke(parameterIndices.Select(i => (object)(arguments?[i])).ToArray());
+            var lookup = arguments.Where(a => a != null).ToDictionary(a => a.Name, a => a.Index);
+            var indices = parameters.Select(p => { int index; return lookup.TryGetValue(p.Name, out index)? index: -1; }).ToArray();
+
+            if (indices.Any(i => i < 0))
+            {
+                throw new ArgumentException($"Failed to map argments for directive: {pattern}");
+            }
+            Func<string[], CommandLineResponse> method = 
+                inputs => (CommandLineResponse)action.DynamicInvoke(indices.Select(i => (object)(inputs?[i])).ToArray());
 
             _directives.Add(MakeKey(tokens), method);
         }

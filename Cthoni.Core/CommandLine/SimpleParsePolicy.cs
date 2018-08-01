@@ -10,7 +10,7 @@ namespace Cthoni.Core.CommandLine
 
         public IEnumerable<ParseToken> ParseSpecification(string sentence) => sentence
             .Split(' ')
-            .Where(t => t != null)
+            .Where(t => !string.IsNullOrWhiteSpace(t))
             .Select(t => new ParseToken {
                 IsParameter = t.StartsWith("$"),
                 Text = t.StartsWith("$")? t.Substring(1): t
