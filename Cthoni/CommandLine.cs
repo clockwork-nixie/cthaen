@@ -1,5 +1,4 @@
 ﻿using System;
-using Cthoni.Core;
 using Cthoni.Core.CommandLine;
 using Cthoni.Core.DependencyInjection;
 using JetBrains.Annotations;
@@ -9,6 +8,7 @@ namespace Cthoni
     [UsedImplicitly]
     public class CommandLine : ICommandLine
     {
+        private const string GOODBYE = "See you!";
         private const string PROMPT = ">> ";
 
         [NotNull] private readonly ICommandLineProcessor _processor;
@@ -26,10 +26,12 @@ namespace Cthoni
 
         public void Run()
         {
+            var isFinished = false;
+
             Console.BackgroundColor = ConsoleColor.Black;
             Console.Clear();
 
-            while (true)
+            do
             {
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine();
@@ -46,13 +48,29 @@ namespace Cthoni
                     {
                         var response = _processor.Process(command);
 
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine(response);
-                    }
-                    catch (CommandLineException exception)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(exception.Message);
+                        switch (response.Type)
+                        {
+                            case CommandLineResponseType.Error:
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine(response.Text);
+                                break;
+
+                            case CommandLineResponseType.Quit:
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.WriteLine(GOODBYE);
+                                isFinished = true;
+                                break;
+
+                            case CommandLineResponseType.Text:
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.WriteLine(response.Text);
+                                break;
+
+                            default:
+                                Console.ForegroundColor = ConsoleColor.Magenta;
+                                Console.WriteLine($"Unknown response type '{response.Type}' with text: {response.Text}");
+                                break;
+                        }
                     }
                     catch (Exception exception)
                     {
@@ -61,6 +79,7 @@ namespace Cthoni
                     }
                 }
             }
+            while (!isFinished);
         }
     }
 }

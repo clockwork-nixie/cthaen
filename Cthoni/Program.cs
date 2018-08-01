@@ -13,7 +13,7 @@ namespace Cthoni
         [NotNull] private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
 
-        [NotNull] public static IFactory Factory { get; set; } = DependencyInjection.CreateFactory();
+        [NotNull, UsedImplicitly] public static IFactory Factory { get; set; } = DependencyInjection.CreateFactory();
 
 
         public static void Main()

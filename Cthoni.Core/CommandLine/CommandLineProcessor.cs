@@ -1,5 +1,4 @@
-﻿using System;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 
 namespace Cthoni.Core.CommandLine
 {
@@ -12,11 +11,26 @@ namespace Cthoni.Core.CommandLine
 
         public CommandLineProcessor()
         {
-            _directives.Register("hello", (Func<string>)(() => "Pleased to meet you."));
-            _directives.Register("my name is $name", (Func<string, string>)(name => $"Pleased to meet you, {name}."));
+            _directives.Register("hello", () => "Pleased to meet you.");
+            _directives.Register("my name is $name", name => $"Pleased to meet you, {name}.");
         }
 
 
-        public string Process(string command) => _directives.Process(command);
+        public CommandLineResponse Process(string command)
+        {
+            CommandLineResponse response;
+
+            try
+            {
+                response = _directives.Process(command);
+            }
+            catch (CommandLineException exception)
+            {
+                response = new CommandLineResponse(
+                    exception.Message ?? "Unknown error.",
+                    CommandLineResponseType.Error);
+            }
+            return response;
+        } 
     }
 }

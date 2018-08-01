@@ -7,7 +7,8 @@ namespace Cthoni.Core.CommandLine
 {
     public class CommandLineDirectiveSet
     {
-        [NotNull] private readonly IDictionary<string, Func<string[], string>> _directives = new Dictionary<string, Func<string[], string>>();
+        [NotNull] private readonly IDictionary<string, Func<string[], CommandLineResponse>> _directives = 
+            new Dictionary<string, Func<string[], CommandLineResponse>>();
         [NotNull] private readonly IParsePolicy _parser;
 
 
@@ -26,34 +27,39 @@ namespace Cthoni.Core.CommandLine
 
 
         [NotNull]
-        public string Process([NotNull] string sentence)
+        public CommandLineResponse Process([NotNull] string sentence)
         {
             if (sentence == null)
             {
                 throw new ArgumentNullException(nameof(sentence));
             }
-            string response;
+            CommandLineResponse response = null;
 
-            if (string.IsNullOrEmpty(sentence))
-            {
-                response = string.Empty;
-            }
-            else
+            if (!string.IsNullOrEmpty(sentence))
             {
                 var tokens = _parser.ParseInput(sentence).ToArray();
-                Func<string[], string> method;
+                Func<string[], CommandLineResponse> method;
 
                 if (!_directives.TryGetValue(MakeKey(tokens), out method) || method == null)
                 {
                     throw new CommandLineException("I'm sorry, Laura; I don't understand the question.");
                 }
-                response = method.Invoke(tokens.Select(t => t.Text).ToArray()) ?? string.Empty;
+                response = method.Invoke(tokens.Select(t => t.Text).ToArray());
             }
-            return response;
+            return response ?? new CommandLineResponse(string.Empty);
         }
 
 
-        public void Register([NotNull] string pattern, [NotNull] Delegate action)
+        // ReSharper disable UnusedMember.Global
+        public void Register([NotNull] string pattern, [NotNull] Func<CommandLineResponse> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<string, CommandLineResponse> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<string, string, CommandLineResponse> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<string, string, string, CommandLineResponse> action) { Register(pattern, (Delegate)action); }
+        public void Register([NotNull] string pattern, [NotNull] Func<string, string, string, string, CommandLineResponse> action) { Register(pattern, (Delegate)action); }
+        // ReSharper restore UnusedMember.Global
+
+
+        private void Register([NotNull] string pattern, [NotNull] Delegate action)
         {
             if (pattern == null)
             {
@@ -65,18 +71,7 @@ namespace Cthoni.Core.CommandLine
                 throw new ArgumentNullException(nameof(action));
             }
 
-            if (action.Method.ReturnParameter?.ParameterType != typeof(string))
-            {
-                throw new ArgumentException("Action must be a delegate which returns a string.");
-            }
-
             var parameters = action.Method.GetParameters();
-
-            if (parameters.Any(p => p?.ParameterType != typeof(string)))
-            {
-                throw new ArgumentException("Action must be a delegate taking only string arguments.");
-            }           
-            
             var tokens = _parser.ParseSpecification(pattern).ToArray();
             var counter = 0;
             var parameterIndices = tokens
@@ -90,8 +85,8 @@ namespace Cthoni.Core.CommandLine
                 throw new ArgumentException($"Input has {parameterIndices.Length} parameters but action requires {parameters.Length}.");
             }
 
-            Func<string[], string> method = arguments => 
-                (string)action.DynamicInvoke(parameterIndices.Select(i => (object)(arguments?[i])).ToArray());
+            Func<string[], CommandLineResponse> method = arguments => 
+                (CommandLineResponse)action.DynamicInvoke(parameterIndices.Select(i => (object)(arguments?[i])).ToArray());
 
             _directives.Add(MakeKey(tokens), method);
         }

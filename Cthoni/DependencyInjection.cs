@@ -1,5 +1,4 @@
-﻿using Cthoni.Core;
-using Cthoni.Core.CommandLine;
+﻿using Cthoni.Core.CommandLine;
 using Cthoni.Core.DependencyInjection;
 using JetBrains.Annotations;
 
