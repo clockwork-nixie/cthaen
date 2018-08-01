@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace Cthoni.Core.CommandLine
 {
@@ -6,9 +7,16 @@ namespace Cthoni.Core.CommandLine
     {
         public CommandLineResponse([NotNull] string text, CommandLineResponseType type = CommandLineResponseType.Text)
         {
+            if (text == null)
+            {
+                throw new ArgumentNullException(nameof(text));
+            }
             Text = text;
             Type = type;
         }
+
+
+        public CommandLineResponse(CommandLineResponseType type) : this(string.Empty, type) { }
 
 
         public static implicit operator CommandLineResponse([NotNull] string text) => new CommandLineResponse(text);

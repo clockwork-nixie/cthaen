@@ -13,6 +13,7 @@ namespace Cthoni.Core.CommandLine
         {
             _directives.Register("hello", () => "Pleased to meet you.");
             _directives.Register("my name is $name", name => $"Pleased to meet you, {name}.");
+            _directives.Register("quit", () => new CommandLineResponse(CommandLineResponseType.Quit));
         }
 
 
