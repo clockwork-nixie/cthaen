@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
@@ -7,8 +6,7 @@ namespace Cthoni.Core.CommandLine
 {
     public class DirectiveSet
     {
-        [NotNull] private readonly IDictionary<string, Func<string[], Response>> _directives = 
-            new Dictionary<string, Func<string[], Response>>();
+        [NotNull] private readonly ParseTree _directives = new ParseTree();
         [NotNull] private readonly IParsePolicy _parser;
 
 
@@ -20,10 +18,6 @@ namespace Cthoni.Core.CommandLine
             }
             _parser = parser;
         }
-
-
-        [NotNull] private string MakeKey([NotNull, ItemNotNull] IEnumerable<ParseToken> tokens) 
-            => string.Join(_parser.SafePlaceholder, tokens.Select(t => t.IsParameter? string.Empty: t.Text));
 
 
         [NotNull]
@@ -38,16 +32,11 @@ namespace Cthoni.Core.CommandLine
             if (!string.IsNullOrEmpty(sentence))
             {
                 var tokens = _parser.ParseInput(sentence).ToArray();
-                Func<string[], Response> method;
+                var method = _directives.Find(tokens.Select(token => token?.Text).ToArray()).FirstOrDefault();
 
-                if (_directives.TryGetValue(MakeKey(tokens), out method) && method != null)
-                {
-                    response = method.Invoke(tokens.Select(t => t.Text).ToArray());
-                }
-                else
-                {
-                    response = new Response("I'm sorry, Laura; I don't understand the question.", ResponseType.NotFound);
-                }
+                response = method != null? 
+                    method.Invoke(tokens.Select(t => t?.Text).ToArray()): 
+                    new Response("I'm sorry, Laura; I don't understand the question.", ResponseType.NotFound);
             }
             return response ?? new Response(string.Empty);
         }
@@ -88,7 +77,8 @@ namespace Cthoni.Core.CommandLine
             }
 
             var lookup = arguments.Where(a => a != null).ToDictionary(a => a.Name, a => a.Index);
-            var indices = parameters.Select(p => { int index; return lookup.TryGetValue(p.Name, out index)? index: -1; }).ToArray();
+            // ReSharper disable once AssignNullToNotNullAttribute
+            var indices = parameters.Select(p => { int index; return lookup.TryGetValue(p?.Name, out index)? index: -1; }).ToArray();
 
             if (indices.Any(i => i < 0))
             {
@@ -97,7 +87,7 @@ namespace Cthoni.Core.CommandLine
             Func<string[], Response> method = 
                 inputs => (Response)action.DynamicInvoke(indices.Select(i => (object)(inputs?[i])).ToArray());
 
-            _directives.Add(MakeKey(tokens), method);
+            _directives.Add(tokens, method);
         }
     }
 }

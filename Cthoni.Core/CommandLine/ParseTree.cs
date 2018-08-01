@@ -61,7 +61,7 @@ namespace Cthoni.Core.CommandLine
                 current.Children[key] = next;
             }
 
-            if (depth == tokens.Count)
+            if (depth == tokens.Count - 1)
             {
                 if (next.Method != null)
                 {
@@ -106,7 +106,7 @@ namespace Cthoni.Core.CommandLine
 
             if (current.Children.TryGetValue(token, out next) && next != null)
             {
-                if (depth == tokens.Count)
+                if (depth == tokens.Count - 1)
                 {
                     if (next.Method != null)
                     {
@@ -121,7 +121,7 @@ namespace Cthoni.Core.CommandLine
             
             if (current.Children.TryGetValue(string.Empty, out next) && next != null)
             {
-                if (depth == tokens.Count)
+                if (depth == tokens.Count - 1)
                 {
                     if (next.Method != null)
                     {
