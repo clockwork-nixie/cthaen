@@ -1,6 +1,6 @@
 ﻿using JetBrains.Annotations;
 
-namespace Cthoni.Core.DependencyInjection
+namespace Cthoni.Utilities
 {
     public interface IFactory
     {

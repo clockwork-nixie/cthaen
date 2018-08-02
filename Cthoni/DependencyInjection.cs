@@ -1,7 +1,7 @@
 ﻿using Cthoni.Core.CommandLine;
 using Cthoni.Core.CommandLine.ParsePolicies;
-using Cthoni.Core.DependencyInjection;
 using Cthoni.Core.Science;
+using Cthoni.Utilities;
 using JetBrains.Annotations;
 
 namespace Cthoni

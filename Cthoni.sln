@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Miscellaneous", "Miscellane
 		.gitignore = .gitignore
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cthoni.Utilities", "Cthoni.Utilities\Cthoni.Utilities.csproj", "{02109D05-7D09-4E01-A495-4EA2BCDB66FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{9363F8AF-222B-4979-913D-2D173188727F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9363F8AF-222B-4979-913D-2D173188727F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9363F8AF-222B-4979-913D-2D173188727F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02109D05-7D09-4E01-A495-4EA2BCDB66FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02109D05-7D09-4E01-A495-4EA2BCDB66FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02109D05-7D09-4E01-A495-4EA2BCDB66FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02109D05-7D09-4E01-A495-4EA2BCDB66FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,8 @@
 ﻿using System;
-using Cthoni.Core.CommandLine;
-using Cthoni.Core.DependencyInjection;
+using Cthoni.Utilities;
 using JetBrains.Annotations;
 
-namespace Cthoni
+namespace Cthoni.Core.CommandLine
 {
     [UsedImplicitly]
     public class CommandLine : ICommandLine

@@ -38,10 +38,6 @@
       <HintPath>..\packages\NLog.4.5.7\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SimpleInjector, Version=4.3.0.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimpleInjector.4.3.0\lib\net45\SimpleInjector.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -57,9 +53,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLine\CommandLine.cs" />
     <Compile Include="CommandLine\DirectiveSet.cs" />
     <Compile Include="CommandLine\CommandLineException.cs" />
     <Compile Include="CommandLine\CommandLineProcessor.cs" />
+    <Compile Include="CommandLine\ICommandLine.cs" />
     <Compile Include="CommandLine\IDirectiveSet.cs" />
     <Compile Include="CommandLine\ParsePolicies\MultiWordParsePolicy.cs" />
     <Compile Include="CommandLine\ParsePolicies\AsymmetricParsePolicy.cs" />
@@ -69,9 +67,7 @@
     <Compile Include="CommandLine\IParsePolicy.cs" />
     <Compile Include="CommandLine\ParseToken.cs" />
     <Compile Include="CommandLine\ParsePolicies\SimpleParsePolicy.cs" />
-    <Compile Include="DependencyInjection\Factory.cs" />
     <Compile Include="CommandLine\ICommandLineProcessor.cs" />
-    <Compile Include="DependencyInjection\IFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Science\FactBase.cs" />
     <Compile Include="Science\IFactBase.cs" />
@@ -79,7 +75,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Cthoni.Utilities\Cthoni.Utilities.csproj">
+      <Project>{02109d05-7d09-4e01-a495-4ea2bcdb66ff}</Project>
+      <Name>Cthoni.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using SimpleInjector;
 
-namespace Cthoni.Core.DependencyInjection
+namespace Cthoni.Utilities
 {
     public class Factory : IFactory
     {

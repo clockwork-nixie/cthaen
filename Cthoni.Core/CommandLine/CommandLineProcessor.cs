@@ -1,6 +1,6 @@
 ﻿using System;
-using Cthoni.Core.DependencyInjection;
 using Cthoni.Core.Science;
+using Cthoni.Utilities;
 using JetBrains.Annotations;
 
 namespace Cthoni.Core.CommandLine
