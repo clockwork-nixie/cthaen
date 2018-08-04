@@ -63,6 +63,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Scripts\Test.cth" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cthoni.Core\Cthoni.Core.csproj">

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Cthoni.Core.CommandLine
+namespace Cthoni.Core.Context
 {
     public interface IParsePolicy
     {

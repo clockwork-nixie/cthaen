@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Cthoni.Utilities;
 
-namespace Cthoni.Core.CommandLine.ParsePolicies
+namespace Cthoni.Core.Context.ParsePolicies
 {
     public class MultiWordParsePolicy : SimpleParsePolicy
     {
@@ -70,7 +71,7 @@ namespace Cthoni.Core.CommandLine.ParsePolicies
             {
                 if (isParameter)
                 {
-                    throw new CommandLineException("Unterminated quoted string.");
+                    throw new InputException("Unterminated quoted string.");
                 }
                 tokens.Add(new ParseToken { Text = buffer.ToString() });
             }

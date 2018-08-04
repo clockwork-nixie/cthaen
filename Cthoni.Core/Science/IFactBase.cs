@@ -4,8 +4,9 @@ namespace Cthoni.Core.Science
 {
     public interface IFactBase
     {
-        void AddRelation([NotNull] Concept descendant, [NotNull] Concept ancestor);
-        [NotNull] Concept CreateConcept([NotNull] string name);
-        Concept FindConcept([NotNull] string name);
+        void AddRelation(Concept descendant, Concept ancestor);
+        [NotNull] Concept CreateConcept(string name);
+        Concept FindConcept(string name, bool isThrowOnNotFound = false);
+        void Reset();
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Cthoni.Core.CommandLine.ParsePolicies
+namespace Cthoni.Core.Context.ParsePolicies
 {
     public class SimpleParsePolicy : IParsePolicy
     {
@@ -28,6 +28,6 @@ namespace Cthoni.Core.CommandLine.ParsePolicies
         public virtual IEnumerable<ParseToken> ParseSpecification(string sentence) => sentence
             .Split(_separators, StringSplitOptions.RemoveEmptyEntries)
             .Where(t => t != null)
-            .Select(t => new ParseToken { IsParameter = t.StartsWith(_prefix), Text = t.StartsWith(_prefix)? t.Substring(1): t });
+            .Select(t => new ParseToken { IsParameter = t.StartsWith(_prefix), Text = t.StartsWith(_prefix)? t.Substring(_prefix.Length): t });
     }
 }

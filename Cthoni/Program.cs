@@ -21,7 +21,7 @@ namespace Cthoni
         {
             try
             {
-                Factory.GetInstance<ICommandLine>().Run();
+                Factory.GetInstance<ICommandLineConsole>().Run();
             }
             catch (Exception exception)
             {

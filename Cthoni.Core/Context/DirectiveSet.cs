@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Cthoni.Core.CommandLine;
+using Cthoni.Utilities;
 using JetBrains.Annotations;
 
 namespace Cthoni.Core.Context
@@ -55,7 +55,7 @@ namespace Cthoni.Core.Context
 
             if (response == null)
             {
-                throw new CommandLineException($"Processing sentence returned null result: {sentence}");
+                throw new StateException($"Processing sentence returned null result: {sentence}");
             }
             return response;
         }

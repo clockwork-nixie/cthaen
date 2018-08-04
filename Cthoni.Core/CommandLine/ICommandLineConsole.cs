@@ -1,6 +1,6 @@
 ﻿namespace Cthoni.Core.CommandLine
 {
-    public interface ICommandLine
+    public interface ICommandLineConsole
     {
         void Run();
     }

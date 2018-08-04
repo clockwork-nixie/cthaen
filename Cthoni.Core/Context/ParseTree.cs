@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Cthoni.Core.CommandLine;
 using JetBrains.Annotations;
 
-namespace Cthoni.Core.CommandLine
+namespace Cthoni.Core.Context
 {
     public class ParseTree<TResponse>
         where TResponse : class

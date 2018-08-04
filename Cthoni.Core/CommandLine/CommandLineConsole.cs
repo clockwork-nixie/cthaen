@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 namespace Cthoni.Core.CommandLine
 {
     [UsedImplicitly]
-    public class CommandLine : ICommandLine
+    public class CommandLineConsole : ICommandLineConsole
     {
         private const string NOT_FOUND = "I'm sorry, Laura; I don't understand the question.";
         private const string GOODBYE = "See you!";
@@ -16,7 +16,7 @@ namespace Cthoni.Core.CommandLine
         [NotNull] private readonly ICommandLineProcessor _processor;
         
 
-        public CommandLine([NotNull] IFactory factory)
+        public CommandLineConsole([NotNull] IFactory factory)
         {
             if (factory == null)
             {

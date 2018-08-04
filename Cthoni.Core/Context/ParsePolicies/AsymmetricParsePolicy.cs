@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Cthoni.Core.CommandLine.ParsePolicies
+namespace Cthoni.Core.Context.ParsePolicies
 {
     public class AsymmetricParsePolicy : SimpleParsePolicy
     {

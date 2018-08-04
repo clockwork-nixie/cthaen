@@ -1,4 +1,4 @@
-﻿namespace Cthoni.Core.CommandLine
+﻿namespace Cthoni.Core.Context
 {
     public class ParseToken
     {

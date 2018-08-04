@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Cthoni.Core.CommandLine;
+using Cthoni.Utilities;
 using JetBrains.Annotations;
 
 namespace Cthoni.Core.Science
@@ -15,8 +16,19 @@ namespace Cthoni.Core.Science
 
         public void AddRelation(Concept descendant, Concept ancestor)
         {
+            if (descendant == null)
+            {
+                throw new ArgumentNullException(nameof(descendant));
+            }
+
+            if (ancestor == null)
+            {
+                throw new ArgumentNullException(nameof(ancestor));
+            }
             var relation = new Relation(descendant, ancestor);
-            var key = $"{descendant.Name}\0${ancestor.Name}";
+            var key = (string.Compare(descendant.Name, ancestor.Name, StringComparison.InvariantCultureIgnoreCase) > 0)?
+                $"{ancestor.Name}\0${descendant.Name}":
+                $"{descendant.Name}\0${ancestor.Name}";
             
             // Needs lock and backout
             if (_relations.TryAdd(key, relation))
@@ -26,7 +38,7 @@ namespace Cthoni.Core.Science
             }
             else
             {
-                throw new CommandLineException($"Relation between {descendant.Name} and {ancestor.Name} already exists.");
+                throw new StateException($"Relation between {descendant.Name} and {ancestor.Name} already exists.");
             }
         }
 
@@ -46,13 +58,13 @@ namespace Cthoni.Core.Science
             }
             catch (ArgumentException)
             {
-                throw new CommandLineException("Concept already exists.");
+                throw new StateException("Concept already exists.");
             }
             return concept;
         }
 
 
-        public Concept FindConcept(string name)
+        public Concept FindConcept(string name, bool isThrowOnNotFound)
         {
             if (name == null)
             {
@@ -63,7 +75,18 @@ namespace Cthoni.Core.Science
 
             _concepts.TryGetValue(safeName, out concept);
 
+            if (isThrowOnNotFound && concept == null)
+            {
+                throw new StateException($"Concept does not exist: {name}");
+            }
             return concept;
+        }
+
+
+        public void Reset()
+        {
+            _concepts.Clear();
+            _relations.Clear();
         }
     }
 }

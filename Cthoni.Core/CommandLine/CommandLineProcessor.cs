@@ -8,7 +8,7 @@ namespace Cthoni.Core.CommandLine
     [UsedImplicitly]
     public class CommandLineProcessor : ICommandLineProcessor
     {
-        [NotNull] private readonly IContext _context;
+        [NotNull] private readonly ICommandSet _commandSet;
 
 
         public CommandLineProcessor([NotNull] IFactory factory)
@@ -17,33 +17,12 @@ namespace Cthoni.Core.CommandLine
             {
                 throw new ArgumentNullException(nameof(factory));
             }
-            _context = factory.GetInstance<IContext>();
+            _commandSet = factory.GetInstance<ICommandSet>();
 
-            var directives = _context.Directives;
-            var facts = _context.Facts;
+            var builder = factory.GetInstance<ICommandLineDirectives>();
+            var context = factory.GetInstance<IContext>();
 
-            directives.Register("trace", () => ResponseType.Trace);
-            directives.Register("$concept is a concept", concept => facts.CreateConcept(concept));
-            directives.Register("$child is a $parent", (child, parent) => {
-                if (child == null)
-                {
-                    throw new ArgumentNullException(nameof(child));
-                }
-                if (parent == null)
-                {
-                    throw new ArgumentNullException(nameof(parent));
-                }
-                var ancestor = facts.FindConcept(parent);
-
-                if (ancestor == null)
-                {
-                    throw new CommandLineException("");
-                }
-                var concept = facts.FindConcept(child) ?? facts.CreateConcept(child);
-
-                facts.AddRelation(concept, ancestor);
-            });
-            directives.Register("quit", () => new Response(ResponseType.Quit));
+            builder.Populate(_commandSet, context);
         }
 
 
@@ -53,9 +32,9 @@ namespace Cthoni.Core.CommandLine
 
             try
             {
-                response = _context.Directives.Process(command);
+                response = _commandSet.Process(command);
             }
-            catch (CommandLineException exception)
+            catch (BaseException exception)
             {
                 response = new Response(exception.Message ?? "Unknown error.", ResponseType.Error);
             }

@@ -57,9 +57,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseException.cs" />
     <Compile Include="Factory.cs" />
     <Compile Include="IFactory.cs" />
+    <Compile Include="InputException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StateException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

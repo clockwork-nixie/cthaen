@@ -53,20 +53,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandLine\CommandLine.cs" />
+    <Compile Include="CommandLine\CommandLineConsole.cs" />
+    <Compile Include="CommandLine\CommandLineDirectives.cs" />
+    <Compile Include="CommandLine\CommandSet.cs" />
+    <Compile Include="CommandLine\ICommandLineDirectives.cs" />
+    <Compile Include="CommandLine\ICommandSet.cs" />
     <Compile Include="Context\DirectiveSet.cs" />
-    <Compile Include="CommandLine\CommandLineException.cs" />
     <Compile Include="CommandLine\CommandLineProcessor.cs" />
-    <Compile Include="CommandLine\ICommandLine.cs" />
+    <Compile Include="CommandLine\ICommandLineConsole.cs" />
     <Compile Include="Context\IDirectiveSet.cs" />
-    <Compile Include="CommandLine\ParsePolicies\MultiWordParsePolicy.cs" />
-    <Compile Include="CommandLine\ParsePolicies\AsymmetricParsePolicy.cs" />
-    <Compile Include="CommandLine\ParseTree.cs" />
+    <Compile Include="Context\ParsePolicies\MultiWordParsePolicy.cs" />
+    <Compile Include="Context\ParsePolicies\AsymmetricParsePolicy.cs" />
+    <Compile Include="Context\ParseTree.cs" />
     <Compile Include="CommandLine\Response.cs" />
     <Compile Include="CommandLine\ResponseType.cs" />
-    <Compile Include="CommandLine\IParsePolicy.cs" />
-    <Compile Include="CommandLine\ParseToken.cs" />
-    <Compile Include="CommandLine\ParsePolicies\SimpleParsePolicy.cs" />
+    <Compile Include="Context\IParsePolicy.cs" />
+    <Compile Include="Context\ParseToken.cs" />
+    <Compile Include="Context\ParsePolicies\SimpleParsePolicy.cs" />
     <Compile Include="CommandLine\ICommandLineProcessor.cs" />
     <Compile Include="Context\Context.cs" />
     <Compile Include="Context\IContext.cs" />
