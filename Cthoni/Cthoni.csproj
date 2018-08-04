@@ -63,7 +63,9 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Scripts\Test.cth" />
+    <Content Include="Scripts\Test.cth">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cthoni.Core\Cthoni.Core.csproj">

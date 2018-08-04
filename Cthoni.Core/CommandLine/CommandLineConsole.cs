@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 using Cthoni.Utilities;
 using JetBrains.Annotations;
@@ -8,10 +11,13 @@ namespace Cthoni.Core.CommandLine
     [UsedImplicitly]
     public class CommandLineConsole : ICommandLineConsole
     {
-        private const string NOT_FOUND = "I'm sorry, Laura; I don't understand the question.";
+        private const string ABORT_LOAD = "Aborting load.";
         private const string GOODBYE = "See you!";
+        private const string LOADING = "Loading file...";
+        private const string NOT_FOUND = "I'm sorry, Laura; I don't understand the question.";
         private const string OK = "OK";
         private const string PROMPT = ">> ";
+        private const string SUFFIX = ".cth";
 
         [NotNull] private readonly ICommandLineProcessor _processor;
         
@@ -28,6 +34,7 @@ namespace Cthoni.Core.CommandLine
 
         public void Run()
         {
+            var loading = new Queue<string>();
             var isFinished = false;
             Exception trace = null;
 
@@ -41,8 +48,18 @@ namespace Cthoni.Core.CommandLine
                 Console.Write(PROMPT);
                 Console.ForegroundColor = ConsoleColor.Green;
 
-                var command = Console.ReadLine();
+                string command;
 
+                if (loading.Count == 0)
+                {
+                    command = Console.ReadLine();
+                }
+                else
+                {
+                    command = loading.Dequeue();
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                    Console.WriteLine(command);
+                }
                 Console.WriteLine();
 
                 if (!string.IsNullOrWhiteSpace(command))
@@ -53,8 +70,27 @@ namespace Cthoni.Core.CommandLine
 
                         switch (response.Type)
                         {
+                            case ResponseType.Load:
+                                var path = Path.Combine(
+                                    AppContext.BaseDirectory ?? string.Empty, 
+                                    "Scripts",
+                                    response.Text);
+
+                                if (!path.EndsWith(SUFFIX))
+                                {
+                                    path = path + SUFFIX;
+                                }
+
+                                foreach (var line in File.ReadAllLines(path).Where(l => !string.IsNullOrWhiteSpace(l)))
+                                {
+                                    loading.Enqueue(line);
+                                }
+
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.WriteLine(LOADING);
+                                break;
+
                             case ResponseType.NotFound:
-                            case ResponseType.Error:
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine(NOT_FOUND);
                                 break;
@@ -76,7 +112,7 @@ namespace Cthoni.Core.CommandLine
                                 break;
 
                             case ResponseType.Trace:
-                                Console.ForegroundColor = ConsoleColor.Cyan;
+                                Console.ForegroundColor = ConsoleColor.Magenta;
                                 Console.WriteLine(trace);
                                 break;
 
@@ -95,8 +131,16 @@ namespace Cthoni.Core.CommandLine
                         {
                             exception = exception.InnerException;
                         }
-                        Console.ForegroundColor = ConsoleColor.Magenta;
+
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine(exception.Message);
+
+                        if (loading.Any())
+                        {
+                            loading.Clear();
+                            Console.WriteLine();
+                            Console.WriteLine(ABORT_LOAD);
+                        }
                     }
                 }
             }

@@ -5,7 +5,7 @@ namespace Cthoni.Core.CommandLine
 {
     public class Response
     {
-        public Response([NotNull] string text, ResponseType type = ResponseType.Text)
+        public Response(string text, ResponseType type = ResponseType.Text)
         {
             if (text == null)
             {

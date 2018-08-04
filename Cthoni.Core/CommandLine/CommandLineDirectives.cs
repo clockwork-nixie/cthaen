@@ -21,6 +21,7 @@ namespace Cthoni.Core.CommandLine
             var facts = context.Facts;
 
             // Administration
+            commandSet.Register("load $filename", filename => new Response(filename, ResponseType.Load));
             commandSet.Register("quit", () => new Response(ResponseType.Quit));
             commandSet.Register("reset", () => facts.Reset());
             commandSet.Register("trace", () => ResponseType.Trace);

@@ -26,19 +26,6 @@ namespace Cthoni.Core.CommandLine
         }
 
 
-        public Response Process(string command)
-        {
-            Response response;
-
-            try
-            {
-                response = _commandSet.Process(command);
-            }
-            catch (BaseException exception)
-            {
-                response = new Response(exception.Message ?? "Unknown error.", ResponseType.Error);
-            }
-            return response;
-        }
+        public Response Process(string command) => _commandSet.Process(command);
     }
 }
