@@ -5,13 +5,14 @@ using JetBrains.Annotations;
 
 namespace Cthoni.Core.CommandLine
 {
-    public class ParseTree
+    public class ParseTree<TResponse>
+        where TResponse : class
     {
         #region ParseNode
         private class ParseNode
         {
             [NotNull] public IDictionary<string, ParseNode> Children { get; } = new Dictionary<string, ParseNode>();
-            public Func<string[], Response> Method { get; set; }
+            public Func<string[], TResponse> Method { get; set; }
         }
         #endregion
 
@@ -19,8 +20,7 @@ namespace Cthoni.Core.CommandLine
         [NotNull] private readonly ParseNode _root = new ParseNode();
 
 
-        public void Add(
-            [NotNull, ItemNotNull] ParseToken[] tokens, [NotNull] Func<string[], Response> method)
+        public void Add([NotNull, ItemNotNull] ParseToken[] tokens, [NotNull] Func<string[], TResponse> method)
         {
             if (tokens == null)
             {
@@ -42,7 +42,7 @@ namespace Cthoni.Core.CommandLine
 
         private static void AddRecursive(
             [NotNull, ItemNotNull] IReadOnlyList<ParseToken> tokens,
-            [NotNull] Func<string[], Response> method,
+            [NotNull] Func<string[], TResponse> method,
             [NotNull] ParseNode current,
             int depth)
         {
@@ -75,14 +75,14 @@ namespace Cthoni.Core.CommandLine
 
 
         [NotNull, ItemNotNull]
-        public IEnumerable<Func<string[], Response>> Find(
+        public IEnumerable<Func<string[], TResponse>> Find(
             [NotNull, ItemNotNull] IReadOnlyList<string> tokens)
         {
             if (tokens == null)
             {
                 throw new ArgumentNullException(nameof(tokens));
             }
-            var methods = new List<Func<string[], Response>>();
+            var methods = new List<Func<string[], TResponse>>();
 
             FindRecursive(tokens, methods, _root, 0);
 
@@ -92,7 +92,7 @@ namespace Cthoni.Core.CommandLine
 
         private static void FindRecursive(
             [NotNull, ItemNotNull] IReadOnlyList<string> tokens,
-            [NotNull] List<Func<string[], Response>> methods,
+            [NotNull] List<Func<string[], TResponse>> methods,
             [NotNull] ParseNode current,
             int depth)
         {

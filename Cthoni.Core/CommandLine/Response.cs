@@ -19,6 +19,7 @@ namespace Cthoni.Core.CommandLine
         public Response(ResponseType type) : this(string.Empty, type) { }
 
 
+        public static implicit operator Response(ResponseType type) => new Response(string.Empty, type);
         public static implicit operator Response([NotNull] string text) => new Response(text);
 
 

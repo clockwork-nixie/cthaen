@@ -7,7 +7,9 @@ namespace Cthoni.Core.CommandLine
         [UsedImplicitly] Unknown = 0,
         Error,
         NotFound,
+        Ok,
         Text,
+        Trace,
         Quit
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Cthoni.Core.CommandLine;
 using Cthoni.Core.CommandLine.ParsePolicies;
+using Cthoni.Core.Context;
 using Cthoni.Core.Science;
 using Cthoni.Utilities;
 using JetBrains.Annotations;
@@ -12,13 +13,15 @@ namespace Cthoni
         {
             var factory = new Factory();
 
-            factory.RegisterSingleton<IFactory>(factory);
-            factory.RegisterSingleton<ICommandLine, CommandLine>();
-            factory.RegisterSingleton<IFactBase, FactBase>();
+            factory.Register<IFactory>(() => factory);
 
+            factory.Register<ICommandLine, CommandLine>();
             factory.Register<ICommandLineProcessor, CommandLineProcessor>();
-            factory.Register<IDirectiveSet>(() => new DirectiveSet(new AsymmetricParsePolicy()));
-
+            factory.Register<IContext, Context>();
+            factory.Register<IDirectiveSet<Response>>(() => new DirectiveSet<Response>(
+                new AsymmetricParsePolicy(), () => ResponseType.NotFound, () => ResponseType.Ok));
+            factory.Register<IFactBase, FactBase>();
+            
             return factory;
         }
     }

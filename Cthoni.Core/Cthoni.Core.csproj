@@ -54,11 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine\CommandLine.cs" />
-    <Compile Include="CommandLine\DirectiveSet.cs" />
+    <Compile Include="Context\DirectiveSet.cs" />
     <Compile Include="CommandLine\CommandLineException.cs" />
     <Compile Include="CommandLine\CommandLineProcessor.cs" />
     <Compile Include="CommandLine\ICommandLine.cs" />
-    <Compile Include="CommandLine\IDirectiveSet.cs" />
+    <Compile Include="Context\IDirectiveSet.cs" />
     <Compile Include="CommandLine\ParsePolicies\MultiWordParsePolicy.cs" />
     <Compile Include="CommandLine\ParsePolicies\AsymmetricParsePolicy.cs" />
     <Compile Include="CommandLine\ParseTree.cs" />
@@ -68,9 +68,13 @@
     <Compile Include="CommandLine\ParseToken.cs" />
     <Compile Include="CommandLine\ParsePolicies\SimpleParsePolicy.cs" />
     <Compile Include="CommandLine\ICommandLineProcessor.cs" />
+    <Compile Include="Context\Context.cs" />
+    <Compile Include="Context\IContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Science\Concept.cs" />
     <Compile Include="Science\FactBase.cs" />
     <Compile Include="Science\IFactBase.cs" />
+    <Compile Include="Science\Relation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
