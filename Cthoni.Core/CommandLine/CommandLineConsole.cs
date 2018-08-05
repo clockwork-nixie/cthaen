@@ -15,7 +15,6 @@ namespace Cthoni.Core.CommandLine
         private const string GOODBYE = "See you!";
         private const string LOADING = "Loading file...";
         private const string NOT_FOUND = "I'm sorry, Laura; I don't understand the question.";
-        private const string OK = "OK";
         private const string PROMPT = ">> ";
         private const string SUFFIX = ".cth";
 
@@ -36,6 +35,7 @@ namespace Cthoni.Core.CommandLine
         {
             var loading = new Queue<string>();
             var isFinished = false;
+            var isSkipBlankLine = false;
             Exception trace = null;
 
             Console.BackgroundColor = ConsoleColor.Black;
@@ -43,8 +43,17 @@ namespace Cthoni.Core.CommandLine
 
             do
             {
+                if (isSkipBlankLine)
+                {
+                    isSkipBlankLine = false;
+                }
+                else
+                {
+                    Console.WriteLine();
+                }
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(_processor.Context.CurrentTopic);
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine();
                 Console.Write(PROMPT);
                 Console.ForegroundColor = ConsoleColor.Green;
 
@@ -96,8 +105,7 @@ namespace Cthoni.Core.CommandLine
                                 break;
 
                             case ResponseType.Ok:
-                                Console.ForegroundColor = ConsoleColor.Yellow;
-                                Console.WriteLine(OK);
+                                isSkipBlankLine = true;
                                 break;
 
                             case ResponseType.Quit:

@@ -14,7 +14,7 @@ namespace Cthoni.Core.Context
         [NotNull] private readonly Func<TResponse> _onSuccess;
 
 
-        public DirectiveSet([NotNull] IParsePolicy parser,
+        protected DirectiveSet([NotNull] IParsePolicy parser,
             [NotNull] Func<TResponse> onNotFound,
             [NotNull] Func<TResponse> onSuccess)
         {
@@ -44,12 +44,10 @@ namespace Cthoni.Core.Context
             {
                 throw new ArgumentNullException(nameof(sentence));
             }
-            TResponse response;
-
             var tokens = _parser.ParseInput(sentence).ToArray();
             var method = _directives.Find(tokens.Select(token => token?.Text).ToArray()).FirstOrDefault();
 
-            response = method != null?
+            var response = method != null?
                 method.Invoke(tokens.Select(t => t?.Text).ToArray()):
                 _onNotFound();
 
@@ -61,7 +59,6 @@ namespace Cthoni.Core.Context
         }
 
 
-        // ReSharper disable UnusedMember.Global
         public void Register(string pattern, Action action) => Register(pattern, (Delegate)action);
         public void Register(string pattern, Action<string> action) => Register(pattern, (Delegate)action);
         public void Register(string pattern, Action<string, string> action) => Register(pattern, (Delegate)action);
@@ -73,7 +70,6 @@ namespace Cthoni.Core.Context
         public void Register(string pattern, Func<string, string, TResponse> action) => Register(pattern, (Delegate)action);
         public void Register(string pattern, Func<string, string, string, TResponse> action) => Register(pattern, (Delegate)action);
         public void Register(string pattern, Func<string, string, string, string, TResponse> action) => Register(pattern, (Delegate)action);
-        // ReSharper restore UnusedMember.Global
 
 
         private void Register([NotNull] string pattern, [NotNull] Delegate action)

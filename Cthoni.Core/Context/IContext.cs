@@ -5,6 +5,8 @@ namespace Cthoni.Core.Context
 {
     public interface IContext
     {
-        [NotNull] IFactBase Facts { get; }
+        [NotNull] ITopic CreateTopic(string name);
+        [NotNull] ITopic CurrentTopic { get; }
+        void SetTopic(string name);
     }
 }

@@ -1,19 +1,21 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Cthoni.Core.CommandLine;
 using Cthoni.Utilities;
 using JetBrains.Annotations;
 
 namespace Cthoni.Core.Science
 {
     [UsedImplicitly]
-    public class FactBase : IFactBase
+    public class Topic : ITopic
     {
         [NotNull] private readonly IDictionary<string, Concept> _concepts = new ConcurrentDictionary<string, Concept>();
         [NotNull] private readonly ConcurrentDictionary<string, Relation> _relations = new ConcurrentDictionary<string, Relation>();
 
+        private bool _isInitialised;
+        [NotNull] string _name = string.Empty;
 
+        
         public void AddRelation(Concept descendant, Concept ancestor)
         {
             if (descendant == null)
@@ -29,7 +31,7 @@ namespace Cthoni.Core.Science
             var key = (string.Compare(descendant.Name, ancestor.Name, StringComparison.InvariantCultureIgnoreCase) > 0)?
                 $"{ancestor.Name}\0${descendant.Name}":
                 $"{descendant.Name}\0${ancestor.Name}";
-            
+
             // Needs lock and backout
             if (_relations.TryAdd(key, relation))
             {
@@ -58,13 +60,13 @@ namespace Cthoni.Core.Science
             }
             catch (ArgumentException)
             {
-                throw new StateException("Concept already exists.");
+                throw new StateException($"Concept already exists: {name}");
             }
             return concept;
         }
 
 
-        public Concept FindConcept(string name, bool isThrowOnNotFound)
+        public Concept FindConcept(string name)
         {
             if (name == null)
             {
@@ -75,11 +77,49 @@ namespace Cthoni.Core.Science
 
             _concepts.TryGetValue(safeName, out concept);
 
-            if (isThrowOnNotFound && concept == null)
+            return concept;
+        }
+
+
+        public Concept FindConceptOrThrow(string name)
+        {
+            var concept = FindConcept(name);
+
+            if (concept == null)
             {
-                throw new StateException($"Concept does not exist: {name}");
+                throw new StateException($"{name} is not a concept.");
             }
             return concept;
+        }
+
+
+        public void Initialise(string name, Action<string, ITopic> register)
+        {
+            if (name == null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (register == null)
+            {
+                throw new ArgumentNullException(nameof(register));
+            }
+
+            if (_isInitialised)
+            {
+                throw new StateException($"Cannot re-initialise topic: {name}");
+            }
+
+            try
+            {
+                register(name, this);
+                _name = name;
+                _isInitialised = true;
+            }
+            catch (ArgumentException)
+            {
+                throw new StateException($"Topic already exists: {name}");
+            }
         }
 
 
@@ -88,5 +128,8 @@ namespace Cthoni.Core.Science
             _concepts.Clear();
             _relations.Clear();
         }
+
+
+        public override string ToString() => _name;
     }
 }

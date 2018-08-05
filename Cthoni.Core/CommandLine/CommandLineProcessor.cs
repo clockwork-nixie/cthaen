@@ -19,11 +19,15 @@ namespace Cthoni.Core.CommandLine
             }
             _commandSet = factory.GetInstance<ICommandSet>();
 
-            var builder = factory.GetInstance<ICommandLineDirectives>();
-            var context = factory.GetInstance<IContext>();
+            Context = factory.GetInstance<IContext>();
 
-            builder.Populate(_commandSet, context);
+            var builder = factory.GetInstance<ICommandLineDirectives>();
+            
+            builder.Populate(_commandSet, Context);
         }
+
+
+        public IContext Context { get; }
 
 
         public Response Process(string command) => _commandSet.Process(command);

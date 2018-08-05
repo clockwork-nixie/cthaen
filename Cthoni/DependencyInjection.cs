@@ -20,7 +20,7 @@ namespace Cthoni
             factory.Register<ICommandLineProcessor, CommandLineProcessor>();
             factory.Register<ICommandSet>(() => new CommandSet(new AsymmetricParsePolicy()));
             factory.Register<IContext, Context>();
-            factory.Register<IFactBase, FactBase>();
+            factory.Register<ITopic, Topic>();
             
             return factory;
         }

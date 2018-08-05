@@ -7,6 +7,8 @@ namespace Cthoni.Core.Context
         where TResponse : class
     {
         [NotNull] TResponse Process([NotNull] string sentence);
+
+        // ReSharper disable UnusedMember.Global
         void Register([NotNull] string pattern, [NotNull] Action action);
         void Register([NotNull] string pattern, [NotNull] Action<string> action);
         void Register([NotNull] string pattern, [NotNull] Action<string, string> action);
@@ -17,5 +19,6 @@ namespace Cthoni.Core.Context
         void Register([NotNull] string pattern, [NotNull] Func<string, string, TResponse> action);
         void Register([NotNull] string pattern, [NotNull] Func<string, string, string, TResponse> action);
         void Register([NotNull] string pattern, [NotNull] Func<string, string, string, string, TResponse> action);
+        // ReSharper restore UnusedMember.Global
     }
 }

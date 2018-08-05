@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Cthoni.Core.Context;
+using Cthoni.Core.Science;
+using Cthoni.Utilities;
 using JetBrains.Annotations;
 
 namespace Cthoni.Core.CommandLine
@@ -18,22 +21,34 @@ namespace Cthoni.Core.CommandLine
             {
                 throw new ArgumentNullException(nameof(context));
             }
-            var facts = context.Facts;
 
             // Administration
             commandSet.Register("load $filename", filename => new Response(filename, ResponseType.Load));
             commandSet.Register("quit", () => new Response(ResponseType.Quit));
-            commandSet.Register("reset", () => facts.Reset());
+            commandSet.Register("reset", () => context.CurrentTopic.Reset());
             commandSet.Register("trace", () => ResponseType.Trace);
-            
-            // Facts
-            commandSet.Register("$concept is a concept", concept => facts.CreateConcept(concept));
+
+            // Topics and concepts
+            commandSet.Register("create topic $name", name => { context.CreateTopic(name); });
+            commandSet.Register("clear topic", () => context.SetTopic(string.Empty));
+            commandSet.Register("set topic $name", name => context.SetTopic(name));
+
+            commandSet.Register("define $name", name => context.CurrentTopic.CreateConcept(name));
 
             commandSet.Register("$child is a type of $parent", (child, parent) => {
-                var ancestor = facts.FindConcept(parent, true);
-                var descendant = facts.FindConcept(child) ?? facts.CreateConcept(child);
+                var topic = context.CurrentTopic;
+                var ancestor = topic.FindConceptOrThrow(parent);
+                var descendant = topic.FindConcept(child) ?? topic.CreateConcept(child);
 
-                facts.AddRelation(descendant, ancestor);
+                topic.AddRelation(descendant, ancestor);
+            });
+
+            commandSet.Register("is $child a type of $parent", (child, parent) => {
+                var topic = context.CurrentTopic;
+                var descendant = topic.FindConceptOrThrow(child);
+                var ancestor = topic.FindConceptOrThrow(parent);
+
+                return new Response(descendant.Relations.Any(r => r.To == ancestor)? "Yes": "No");
             });
         }
     }
