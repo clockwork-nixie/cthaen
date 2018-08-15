@@ -48,7 +48,7 @@ namespace Cthoni.Core.CommandLine
                 var descendant = topic.FindConceptOrThrow(child);
                 var ancestor = topic.FindConceptOrThrow(parent);
 
-                return new Response(descendant.Relations.Any(r => r.To == ancestor)? "Yes": "No");
+                return new Response(descendant.IsDescendantOf(ancestor)? "Yes": "No");
             });
         }
     }

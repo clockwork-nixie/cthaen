@@ -111,6 +111,8 @@ namespace Cthoni.Core.CommandLine
                             case ResponseType.Quit:
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 Console.WriteLine(GOODBYE);
+                                Console.WriteLine();
+                                Console.ResetColor();
                                 isFinished = true;
                                 break;
 

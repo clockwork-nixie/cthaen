@@ -5,10 +5,14 @@
             "label": "build",
             "command": "dotnet",
             "type": "process",
-            "args": [
-                "build",
-                "${workspaceFolder}/Cthoni/Cthoni.csproj"
-            ],
+            "args": ["build"],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "run",
+            "command": "dotnet",
+            "type": "process",
+            "args": ["run", "--project", "Cthoni"],
             "problemMatcher": "$msCompile"
         }
     ]

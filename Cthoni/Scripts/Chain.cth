@@ -1,0 +1,5 @@
+define a
+b is a type of a
+c is a type of b
+is c a type of a
+is b a type of c
