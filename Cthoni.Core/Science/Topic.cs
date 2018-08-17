@@ -9,14 +9,14 @@ namespace Cthoni.Core.Science
     [UsedImplicitly]
     public class Topic : ITopic
     {
-        [NotNull] private readonly IDictionary<string, Concept> _concepts = new ConcurrentDictionary<string, Concept>();
+        [NotNull] private readonly IDictionary<string, IConcept> _concepts = new ConcurrentDictionary<string, IConcept>();
         [NotNull] private readonly ConcurrentDictionary<string, Relation> _relations = new ConcurrentDictionary<string, Relation>();
 
         private bool _isInitialised;
         [NotNull] string _name = string.Empty;
 
         
-        public void AddRelation(Concept descendant, Concept ancestor)
+        public void AddRelation(IConcept descendant, IConcept ancestor, Relationship relationship)
         {
             if (descendant == null)
             {
@@ -27,7 +27,7 @@ namespace Cthoni.Core.Science
             {
                 throw new ArgumentNullException(nameof(ancestor));
             }
-            var relation = new Relation(descendant, ancestor);
+            var relation = new Relation(descendant, ancestor, relationship);
             var key = (string.Compare(descendant.Name, ancestor.Name, StringComparison.InvariantCultureIgnoreCase) > 0)?
                 $"{ancestor.Name}\0${descendant.Name}":
                 $"{descendant.Name}\0${ancestor.Name}";
@@ -45,7 +45,7 @@ namespace Cthoni.Core.Science
         }
 
 
-        public Concept CreateConcept(string name)
+        public IConcept CreateConcept(string name)
         {
             if (name == null)
             {
@@ -66,14 +66,14 @@ namespace Cthoni.Core.Science
         }
 
 
-        public Concept FindConcept(string name)
+        public IConcept FindConcept(string name)
         {
             if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
             }
             var safeName = name.ToLowerInvariant();
-            Concept concept;
+            IConcept concept;
 
             _concepts.TryGetValue(safeName, out concept);
 
@@ -81,7 +81,7 @@ namespace Cthoni.Core.Science
         }
 
 
-        public Concept FindConceptOrThrow(string name)
+        public IConcept FindConceptOrThrow(string name)
         {
             var concept = FindConcept(name);
 

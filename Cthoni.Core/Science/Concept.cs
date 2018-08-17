@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace Cthoni.Core.Science
 {
-    public class Concept
+    public class Concept : IConcept
     {
         public Concept([NotNull] string name)
         {
@@ -22,11 +22,11 @@ namespace Cthoni.Core.Science
         [NotNull] public IList<Relation> Relations { get; }
 
 
-        public bool IsDescendantOf([NotNull] Concept ancestor)
+        public bool IsDescendantOf([NotNull] IConcept ancestor)
         {
-            var cache = new HashSet<Concept>();
-            var stack = new Stack<Concept>();
-            var candidate = this;
+            var cache = new HashSet<IConcept>();
+            var stack = new Stack<IConcept>();
+            IConcept candidate = this;
             var result = false;
 
             while (candidate != null)
@@ -40,7 +40,7 @@ namespace Cthoni.Core.Science
                     }
                     cache.Add(candidate);
 
-                    foreach (var target in candidate.Relations.Select(r => r.To))
+                    foreach (var target in candidate.Relations.Where(r => r.Relationship == Relationship.Parent).Select(r => r.To))
                     {
                         stack.Push(target);
                     }

@@ -1,4 +1,6 @@
 ﻿define animal
+define cat
+define dog
 cat is a type of animal
 dog is a type of animal
 is cat a type of animal
